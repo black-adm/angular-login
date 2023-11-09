@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, filter, switchMap } from 'rxjs';
 import { map } from 'rxjs';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { Router, UrlTree } from '@angular/router';
 
 export const USER_STORAGE_KEY = 'APP_TOKEN';
 
@@ -76,6 +77,34 @@ export class AuthService {
   }
 
   getCurrentUserId() {
-    return this.user.getValue()!.id;
+    return this.user.getValue()?.id;
+  }
+
+  isLoggedIn(): Observable<boolean | UrlTree> {
+    const router = inject(Router);
+
+    return this.getCurrentUser().pipe(
+      filter((user) => user !== undefined),
+      map((isAuthenticated) => {
+        if (isAuthenticated) {
+          return true;
+        }
+        return router.createUrlTree(['/']);
+      })
+    )
+  }
+
+  shouldLogIn(): Observable<boolean | UrlTree> {
+    const router = inject(Router);
+
+    return this.getCurrentUser().pipe(
+      filter((user) => user !== undefined),
+      map((isAuthenticated) => {
+        if (isAuthenticated) {
+          return router.createUrlTree(['/dashboard']);
+        }
+        return true;
+      })
+    )
   }
 }

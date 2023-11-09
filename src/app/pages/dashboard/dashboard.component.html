@@ -16,9 +16,14 @@
         </div>
 
         <div class="mt-16 text-center">
-            <img src="https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/pass/Cohen-Linus-Torvalds.jpg" alt="Foto de perfil"
-                class="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28">
-            <h5 class="hidden mt-4 text-xl font-semibold text-white lg:block">Linus Torvalds</h5>
+            <img src="https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/pass/Cohen-Linus-Torvalds.jpg"
+                alt="Foto de perfil" class="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28">
+
+            <h5 class="hidden mt-4 text-xl font-semibold text-white lg:block">
+                Linus Torvalds
+            </h5>
+
+            <p class="text-xs text-gray-300"> {{ userId }} </p>
         </div>
 
         <div class="space-y-2 tracking-wide mt-8">
@@ -41,13 +46,15 @@
     </div>
 
     <div class="px-6 -mx-6 pt-4 flex justify-between items-center border-t border-teal-300">
-        <button class="px-4 py-3 flex items-center space-x-4 rounded-md text-white group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            <span class="group-hover:text-gray-200">Logout</span>
+        <button (click)="userLogout()" class="px-4 py-3 flex items-center space-x-4 rounded-md text-white group">
+            <span class="inline-flex items-center justify-center gap-x-2 group-hover:text-teal-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+            </span>
         </button>
     </div>
 </aside>

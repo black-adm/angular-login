@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
-  //userId = this.authService.getCurrentUserId();
+  userId = this.authService.getCurrentUserId();
 
   constructor(
     private authService: AuthService,
