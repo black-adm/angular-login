@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/servies/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,10 +17,11 @@ export class LoginComponent {
   });
   error = '';
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private authService: AuthService) { }
 
   onSubmit() {
-    console.log('SUBMIT: ', this.form.value);
+    const { email, password } = this.form.getRawValue();    
+    this.authService.login(email, password).subscribe();
   }
 
   createAccount() {
