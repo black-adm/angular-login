@@ -31,7 +31,6 @@ export class AuthService {
         token: token,
         id: decoded.sub!
       }
-
       this.user.next(data);
     }
     this.user.next(null);
@@ -42,7 +41,7 @@ export class AuthService {
       .post('https://apidevelopbetterapps.com/users',
         { email, password })
       .pipe(
-        switchMap((response: any) => {
+        switchMap(() => {
           return this.login(email, password);
         })
       )
@@ -65,5 +64,18 @@ export class AuthService {
           return data;
         })
       );
+  }
+
+  logout() {
+    localStorage.removeItem(USER_STORAGE_KEY);
+    this.user.next(null);
+  }
+
+  getCurrentUser() {
+    return this.user.asObservable();
+  }
+
+  getCurrentUserId() {
+    return this.user.getValue()!.id;
   }
 }

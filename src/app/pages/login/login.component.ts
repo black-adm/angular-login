@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/servies/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,14 +18,34 @@ export class LoginComponent {
   });
   error = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService) { }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   onSubmit() {
-    const { email, password } = this.form.getRawValue();    
-    this.authService.login(email, password).subscribe();
+    const { email, password } = this.form.getRawValue();
+    this.authService.login(email, password).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/dashboard');
+      },
+      error: () => {
+        this.error = 'Falha ao realizar login, verifique suas credenciais de acesso!'
+      }
+    });
   }
 
   createAccount() {
-    console.log('CREATE: ', this.form.value);
+    const { email, password } = this.form.getRawValue();
+    
+    this.authService.register(email, password).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/dashboard');
+      },
+      error: () => {
+        this.error = 'Erro ao criar usuário, verifique os dados digitados!';
+      }
+    })
   }
 }
