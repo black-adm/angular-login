@@ -12,8 +12,9 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   form = this.fb.nonNullable.group({
+    name: ['', [Validators.minLength(4)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: ['', [Validators.required, Validators.minLength(4)]]
   });
   error = '';
 
@@ -30,15 +31,16 @@ export class LoginComponent {
         this.router.navigateByUrl('/dashboard');
       },
       error: () => {
+        console.log(this.error)
         this.error = 'Falha ao realizar login, verifique suas credenciais de acesso!'
       }
     });
   }
 
   createAccount() {
-    const { email, password } = this.form.getRawValue();
-    
-    this.authService.register(email, password).subscribe({
+    const { name, email, password } = this.form.getRawValue();
+
+    this.authService.register(name, email, password).subscribe({
       next: () => {
         this.router.navigateByUrl('/dashboard');
       },

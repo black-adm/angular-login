@@ -34,13 +34,13 @@ export class AuthService {
       }
       this.user.next(data);
     }
-    this.user.next(null);
+    else this.user.next(null);
   }
 
-  register(email: string, password: string) {
+  register(name: string, email: string, password: string) {
     return this.http
-      .post('https://apidevelopbetterapps.com/users',
-        { email, password })
+      .post('http://localhost:3001/sign-up',
+        { name, email, password })
       .pipe(
         switchMap(() => {
           return this.login(email, password);
@@ -50,17 +50,18 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http
-      .post('https://api.developbetterapps.com/auth',
+      .post('http://localhost:3001/sign-in',
         { email, password })
       .pipe(
         map((response: any) => {
-          localStorage.setItem(USER_STORAGE_KEY, response.token);
-          const decoded = jwtDecode<JwtPayload>(response.token)
-          const data: UserData = {
-            token: response.token,
-            id: decoded.sub!
-          }
+          console.log('Resposta da API:', response);
+          localStorage.setItem(USER_STORAGE_KEY, response.accessToken);
 
+          const decoded = jwtDecode<JwtPayload>(response.accessToken);
+          const data: UserData = {
+            token: response.accessToken,
+            id: decoded.sub!
+          };
           this.user.next(data);
           return data;
         })
@@ -86,9 +87,8 @@ export class AuthService {
     return this.getCurrentUser().pipe(
       filter((user) => user !== undefined),
       map((isAuthenticated) => {
-        if (isAuthenticated) {
-          return true;
-        }
+        if (isAuthenticated) return true;
+
         return router.createUrlTree(['/']);
       })
     )
@@ -100,9 +100,8 @@ export class AuthService {
     return this.getCurrentUser().pipe(
       filter((user) => user !== undefined),
       map((isAuthenticated) => {
-        if (isAuthenticated) {
-          return router.createUrlTree(['/dashboard']);
-        }
+        if (isAuthenticated) return router.createUrlTree(['/dashboard']);
+
         return true;
       })
     )
