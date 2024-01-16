@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
+  selector: 'app-register',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
+  standalone: true,
+  templateUrl: './register.component.html',
 })
-export class LoginComponent {
+export class RegisterComponent {
   form = this.fb.nonNullable.group({
+    name: ['', [Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(4)]]
   });
@@ -20,19 +21,19 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
-  onSubmit() {
-    const { email, password } = this.form.getRawValue();
-    this.authService.login(email, password).subscribe({
+  onCreate() {
+    const { name, email, password } = this.form.getRawValue();
+
+    this.authService.register(name, email, password).subscribe({
       next: () => {
         this.router.navigateByUrl('/dashboard');
       },
       error: () => {
-        console.log(this.error)
-        this.error = 'Falha ao realizar login, verifique suas credenciais de acesso!'
+        this.error = 'Erro ao criar usuário, verifique os dados digitados!';
       }
-    });
+    })
   }
 }
